@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<body>
+<style>
+table,
+th,
+td {
+padding: 10px;
+border: 1px solid black;
+border-collapse: collapse;
+}
+</style>
+<h1>The template Element</h1>
+<div id="myChart"></div>
+
+<table id="data-table" style="margin-top: 20px;"></table>
+
+
+</body>
+</html>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+const apiKey = "T0NRT42OS0ZJPQ8O";
+const ticker = "EQNR";
+const API_URL = `https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol=${ticker}&apikey=${apiKey}`;
+console.log(API_URL)
+fetch(API_URL)
+  .then(response => response.json())
+  .then(dataa => {
+	console.log(dataa)
+    const financials = dataa.annualReports;
+    const labels = financials.map(financial => financial.fiscalDateEnding);
+    const revenues = financials.map(financial => financial.totalRevenue);
+
+	const data = [{
+        x: labels,
+        y: revenues,
+        type: 'scatter',
+        mode: 'lines+markers',
+        marker: { color: 'red' },
+    }];
+
+    // Create the layout for the chart
+    const layout = {
+        title: 'Revenue over time',
+        xaxis: {
+            title: 'Period'
+        },
+        yaxis: {
+            title: 'Revenue'
+        }
+    };
+
+    // Render the chart in the div element
+    Plotly.newPlot('myChart', data, layout);
+  })
+  .catch(error => console.error(`Error: ${error}`));
+
+</script>
+
