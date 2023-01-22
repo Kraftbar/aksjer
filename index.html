@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>The template Element</h1>
+
+
+
+</body>
+</html>
+<script>
+// Define the API endpoint for revenue statistics
+const API_URL = 'https://financialmodelingprep.com/api/v3/financials/income-statement/AAPL?apikey=459e4cbe366ea92dab1e14d43c6b64df';
+
+
+// Use the fetch API to retrieve the data
+fetch(API_URL)
+  .then(response => response.json())
+  .then(data => {
+    // Extract the relevant data from the API response
+    const financials = data.financials;
+    financials.forEach(function(financial) {
+        console.log(`Revenue: ${financial.Revenue} - Period: ${financial.date}`);
+    });
+  })
+  .catch(error => console.error(`Error: ${error}`));
+</script>
+
