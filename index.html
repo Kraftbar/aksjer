@@ -21,13 +21,16 @@ border-collapse: collapse;
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script>
 
+const apiKey = "459e4cbe366ea92dab1e14d43c6b64df";
+const ticker = "EQNR";
 // Define the API endpoint for revenue statistics
-const API_URL = 'https://financialmodelingprep.com/api/v3/financials/income-statement/EQNR?apikey=459e4cbe366ea92dab1e14d43c6b64df';
+const API_URL = `https://financialmodelingprep.com/api/v3/financials/income-statement/${ticker}?apikey=${apiKey}`;
 
 // Use the fetch API to retrieve the data
 fetch(API_URL)
   .then(response => response.json())
   .then(dataa => {
+	console.log(dataa)
     // Extract the relevant data from the API response
     const financials = dataa.financials;
     const labels = financials.map(financial => financial.date);
