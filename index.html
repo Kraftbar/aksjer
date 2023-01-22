@@ -1,27 +1,77 @@
 <!DOCTYPE html>
 <html>
 <body>
-
+<style>
+table,
+th,
+td {
+padding: 10px;
+border: 1px solid black;
+border-collapse: collapse;
+}
+</style>
 <h1>The template Element</h1>
+<div id="myChart"></div>
 
+<table id="data-table" style="margin-top: 20px;"></table>
 
 
 </body>
 </html>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script>
-// Define the API endpoint for revenue statistics
-const API_URL = 'https://financialmodelingprep.com/api/v3/financials/income-statement/AAPL?apikey=459e4cbe366ea92dab1e14d43c6b64df';
 
+// Define the API endpoint for revenue statistics
+const API_URL = 'https://financialmodelingprep.com/api/v3/financials/income-statement/EQNR?apikey=459e4cbe366ea92dab1e14d43c6b64df';
 
 // Use the fetch API to retrieve the data
 fetch(API_URL)
   .then(response => response.json())
-  .then(data => {
+  .then(dataa => {
     // Extract the relevant data from the API response
-    const financials = data.financials;
-    financials.forEach(function(financial) {
-        console.log(`Revenue: ${financial.Revenue} - Period: ${financial.date}`);
-    });
+    const financials = dataa.financials;
+    const labels = financials.map(financial => financial.date);
+    const revenues = financials.map(financial => financial.Revenue);
+    // Create the data for the chart
+    const data = [{
+        x: labels,
+        y: revenues,
+        type: 'scatter',
+        mode: 'lines+markers',
+        marker: { color: 'red' },
+    }];
+
+    // Create the layout for the chart
+    const layout = {
+        title: 'Revenue over time',
+        xaxis: {
+            title: 'Period'
+        },
+        yaxis: {
+            title: 'Revenue'
+        }
+    };
+
+    // Render the chart in the div element
+    Plotly.newPlot('myChart', data, layout);
+    // Create the table
+    const table = document.getElementById("data-table");
+    for (let i = 0; i < financials.length; i++) {
+        const row = table.insertRow(-1);
+        const dateCell = row.insertCell(0);
+        const revenueCell = row.insertCell(1);
+        dateCell.innerHTML = financials[i].date;
+        revenueCell.innerHTML = financials[i].Revenue;
+		
+		dateCell.innerHTML = financials[i].date;
+        let revenue = financials[i].Revenue;
+        if (revenue >= 1000000000) {
+            revenue = (revenue / 1000000000).toFixed(2) + " M";
+        } else if (revenue >= 1000000) {
+            revenue = (revenue / 1000000).toFixed(2) + " B";
+        }
+        revenueCell.innerHTML = revenue;
+    }
   })
   .catch(error => console.error(`Error: ${error}`));
 </script>
