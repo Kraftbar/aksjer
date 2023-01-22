@@ -1,2 +1,2 @@
 # aksjer
-![plot](.image.png)
+![plot](image.png)
